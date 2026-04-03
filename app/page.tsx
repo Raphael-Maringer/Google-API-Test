@@ -68,7 +68,24 @@ export default function HomePage() {
 
       <div className="card bg-base-100 shadow-md">
         <div className="card-body gap-4">
-          <p className="font-medium">{filteredAndSorted.length} apartments found</p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <p className="font-medium">{filteredAndSorted.length} apartments found</p>
+
+            <label className="form-control w-full max-w-xs">
+              <span className="label-text">Sort by</span>
+              <select
+                className="select select-bordered"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value as SortOption)}
+              >
+                {sortOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
 
           {isLoading ? <p>Loading apartments...</p> : null}
           {error ? <p className="text-error">{error}</p> : null}
