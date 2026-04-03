@@ -18,8 +18,14 @@ export type SortKey =
   | 'price'
   | 'size'
   | 'wu_transit'
+  | 'wu_bike'
+  | 'wu_walk'
   | 'uni_transit'
-  | 'total_commute'
+  | 'uni_bike'
+  | 'uni_walk'
+  | 'total_transit'
+  | 'total_bike'
+  | 'total_walk'
   | 'created_at';
 
 export type SortDirection = 'asc' | 'desc';

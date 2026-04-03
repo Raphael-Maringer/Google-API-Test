@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Apartment, SortKey, SortState } from '@/lib/types';
-import { getTotalCommute } from '@/lib/apartmentUtils';
+import { getTotalBike, getTotalTransit, getTotalWalk } from '@/lib/apartmentUtils';
 
 type ApartmentTableProps = {
   apartments: Apartment[];
@@ -14,9 +14,15 @@ const sortableColumns: Array<{ key: SortKey; label: string }> = [
   { key: 'address', label: 'Address' },
   { key: 'price', label: 'Price (€)' },
   { key: 'size', label: 'Size (m²)' },
-  { key: 'wu_transit', label: 'WU (transit)' },
-  { key: 'uni_transit', label: 'Uni (transit)' },
-  { key: 'total_commute', label: 'Total commute' },
+  { key: 'wu_transit', label: 'WU Öffi' },
+  { key: 'wu_bike', label: 'WU Bike' },
+  { key: 'wu_walk', label: 'WU Zu Fuß' },
+  { key: 'uni_transit', label: 'Uni Öffi' },
+  { key: 'uni_bike', label: 'Uni Bike' },
+  { key: 'uni_walk', label: 'Uni Zu Fuß' },
+  { key: 'total_transit', label: 'Total Öffi' },
+  { key: 'total_bike', label: 'Total Bike' },
+  { key: 'total_walk', label: 'Total Zu Fuß' },
 ];
 
 function SortIndicator({ active, direction }: { active: boolean; direction: SortState['direction'] }) {
@@ -30,13 +36,13 @@ function SortIndicator({ active, direction }: { active: boolean; direction: Sort
 export default function ApartmentTable({ apartments, sortState, onSortChange }: ApartmentTableProps) {
   return (
     <div className="overflow-x-auto">
-      <table className="table table-zebra">
+      <table className="table table-zebra table-pin-rows">
         <thead>
           <tr>
             {sortableColumns.map((column) => (
               <th key={column.key}>
                 <button
-                  className="btn btn-ghost btn-xs normal-case"
+                  className="btn btn-ghost btn-xs normal-case whitespace-nowrap"
                   type="button"
                   onClick={() => onSortChange(column.key)}
                 >
@@ -59,8 +65,14 @@ export default function ApartmentTable({ apartments, sortState, onSortChange }: 
               <td>{apartment.price}</td>
               <td>{apartment.size}</td>
               <td>{apartment.wu_transit} min</td>
+              <td>{apartment.wu_bike} min</td>
+              <td>{apartment.wu_walk} min</td>
               <td>{apartment.uni_transit} min</td>
-              <td>{getTotalCommute(apartment)} min</td>
+              <td>{apartment.uni_bike} min</td>
+              <td>{apartment.uni_walk} min</td>
+              <td>{getTotalTransit(apartment)} min</td>
+              <td>{getTotalBike(apartment)} min</td>
+              <td>{getTotalWalk(apartment)} min</td>
               <td>
                 <a className="link link-primary" href={apartment.link} target="_blank" rel="noreferrer">
                   Open
