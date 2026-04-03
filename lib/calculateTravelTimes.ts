@@ -15,8 +15,8 @@ export type TravelTimes = {
 };
 
 const MOCK_TIMES: TravelTimes = {
-  wu: { transit: 25, bike: 19, walk: 53 },
-  uni: { transit: 31, bike: 24, walk: 67 },
+  wu: { transit: 0, bike: 0, walk: 0 },
+  uni: { transit: 0, bike: 0, walk: 0 },
 };
 
 async function getModeDurationInMinutes(
@@ -88,7 +88,7 @@ export async function calculateTravelTimes(origin: string): Promise<TravelTimes>
       getLocationTravelTimes(origin, UNI_INF_ADDRESS, apiKey),
     ]);
 
-    console.log('Echte Travel Times erfolgreich geladen');
+    console.log('Travel Times erfolgreich geladen');
     return { wu, uni };
   } catch (error) {
     console.error('Google API Fehler -> MOCK_TIMES', error);
