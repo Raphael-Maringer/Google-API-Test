@@ -56,7 +56,7 @@ export default function HomePage() {
     <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 p-4 md:p-8">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Apartment Comparison (Öffi, Bike, Zu Fuß)</h1>
+          <h1 className="text-3xl font-bold">Apartment Comparison</h1>
           <p className="text-base-content/70">Alle Wohnungen in einer übersichtlichen Tabelle.</p>
         </div>
         <Link className="btn btn-primary" href="/apartments/new">
@@ -69,6 +69,9 @@ export default function HomePage() {
       <div className="card bg-base-100 shadow-md">
         <div className="card-body gap-4">
           <p className="font-medium">{filteredAndSorted.length} apartments found</p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <p className="font-medium">{filteredAndSorted.length} apartments found</p>
+          </div>
 
           {isLoading ? <p>Loading apartments...</p> : null}
           {error ? <p className="text-error">{error}</p> : null}

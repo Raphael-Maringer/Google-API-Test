@@ -14,7 +14,7 @@ Full-stack Next.js (App Router) app for comparing apartments by price, size, and
 - Main page (`/`) with a clean apartment overview table
 - Dedicated add page (`/apartments/new`) for adding a new apartment
 - Optional detail page (`/apartments/[id]`) when clicking an apartment address
-- Clickable table headers for ascending/descending sorting across Öffi/Bike/Zu Fuß metrics
+- Clickable table headers for ascending/descending sorting
 - Client-side filters (price, size, max commute)
 
 ## Setup
