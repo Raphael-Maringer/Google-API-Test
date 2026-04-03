@@ -10,6 +10,7 @@ type ApartmentFormProps = {
 
 export default function ApartmentForm({ onSaved, redirectTo }: ApartmentFormProps) {
   const router = useRouter();
+
   const [address, setAddress] = useState('');
   const [link, setLink] = useState('');
   const [price, setPrice] = useState('');
@@ -38,15 +39,18 @@ export default function ApartmentForm({ onSaved, redirectTo }: ApartmentFormProp
         throw new Error('Failed to save apartment.');
       }
 
+      // reset form
       setAddress('');
       setLink('');
       setPrice('');
       setSize('');
 
+      // optional callback
       if (onSaved) {
         await onSaved();
       }
 
+      // redirect if provided
       if (redirectTo) {
         router.push(redirectTo);
       }
@@ -61,6 +65,7 @@ export default function ApartmentForm({ onSaved, redirectTo }: ApartmentFormProp
     <div className="card bg-base-100 shadow-md">
       <div className="card-body">
         <h2 className="card-title">Add apartment</h2>
+
         <form className="grid gap-3 md:grid-cols-2" onSubmit={handleSubmit}>
           <label className="form-control w-full">
             <span className="label-text">Address</span>
@@ -113,7 +118,7 @@ export default function ApartmentForm({ onSaved, redirectTo }: ApartmentFormProp
             </button>
           </div>
 
-          {error ? <p className="text-error md:col-span-2">{error}</p> : null}
+          {error && <p className="text-error md:col-span-2">{error}</p>}
         </form>
       </div>
     </div>
