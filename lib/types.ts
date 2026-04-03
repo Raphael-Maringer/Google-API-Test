@@ -13,14 +13,21 @@ export type Apartment = {
   created_at: string;
 };
 
-export type SortOption =
-  | 'total_asc'
-  | 'price_asc'
-  | 'price_desc'
-  | 'size_asc'
-  | 'size_desc'
-  | 'wu_transit_asc'
-  | 'uni_transit_asc';
+export type SortKey =
+  | 'address'
+  | 'price'
+  | 'size'
+  | 'wu_transit'
+  | 'uni_transit'
+  | 'total_commute'
+  | 'created_at';
+
+export type SortDirection = 'asc' | 'desc';
+
+export type SortState = {
+  key: SortKey;
+  direction: SortDirection;
+};
 
 export type Filters = {
   maxPrice?: number;

@@ -1,12 +1,15 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 type ApartmentFormProps = {
-  onSaved: () => Promise<void>;
+  onSaved?: () => Promise<void>;
+  redirectTo?: string;
 };
 
-export default function ApartmentForm({ onSaved }: ApartmentFormProps) {
+export default function ApartmentForm({ onSaved, redirectTo }: ApartmentFormProps) {
+  const router = useRouter();
   const [address, setAddress] = useState('');
   const [link, setLink] = useState('');
   const [price, setPrice] = useState('');
@@ -39,7 +42,14 @@ export default function ApartmentForm({ onSaved }: ApartmentFormProps) {
       setLink('');
       setPrice('');
       setSize('');
-      await onSaved();
+
+      if (onSaved) {
+        await onSaved();
+      }
+
+      if (redirectTo) {
+        router.push(redirectTo);
+      }
     } catch {
       setError('Could not save apartment. Please verify your env vars and Supabase setup.');
     } finally {

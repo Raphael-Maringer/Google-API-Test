@@ -9,6 +9,14 @@ Full-stack Next.js (App Router) app for comparing apartments by price, size, and
 - Supabase (PostgreSQL)
 - Google Maps Distance Matrix API (with automatic mock fallback)
 
+## Features
+
+- Main page (`/`) with a clean apartment overview table
+- Dedicated add page (`/apartments/new`) for adding a new apartment
+- Optional detail page (`/apartments/[id]`) when clicking an apartment address
+- Clickable table headers for ascending/descending sorting
+- Client-side filters (price, size, max commute)
+
 ## Setup
 
 1. Install dependencies:

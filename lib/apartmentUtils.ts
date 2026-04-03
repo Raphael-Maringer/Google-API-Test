@@ -1,29 +1,31 @@
-import { Apartment, Filters, SortOption } from './types';
+import { Apartment, Filters, SortState } from './types';
 
 export function getTotalCommute(apartment: Apartment): number {
   return apartment.wu_transit + apartment.uni_transit;
 }
 
-export function sortApartments(apartments: Apartment[], sortOption: SortOption): Apartment[] {
+export function sortApartments(apartments: Apartment[], sortState: SortState): Apartment[] {
   const sorted = [...apartments];
 
   sorted.sort((a, b) => {
-    switch (sortOption) {
-      case 'price_asc':
-        return a.price - b.price;
-      case 'price_desc':
-        return b.price - a.price;
-      case 'size_asc':
-        return a.size - b.size;
-      case 'size_desc':
-        return b.size - a.size;
-      case 'wu_transit_asc':
-        return a.wu_transit - b.wu_transit;
-      case 'uni_transit_asc':
-        return a.uni_transit - b.uni_transit;
-      case 'total_asc':
+    const factor = sortState.direction === 'asc' ? 1 : -1;
+
+    switch (sortState.key) {
+      case 'address':
+        return a.address.localeCompare(b.address) * factor;
+      case 'price':
+        return (a.price - b.price) * factor;
+      case 'size':
+        return (a.size - b.size) * factor;
+      case 'wu_transit':
+        return (a.wu_transit - b.wu_transit) * factor;
+      case 'uni_transit':
+        return (a.uni_transit - b.uni_transit) * factor;
+      case 'created_at':
+        return (new Date(a.created_at).getTime() - new Date(b.created_at).getTime()) * factor;
+      case 'total_commute':
       default:
-        return getTotalCommute(a) - getTotalCommute(b);
+        return (getTotalCommute(a) - getTotalCommute(b)) * factor;
     }
   });
 

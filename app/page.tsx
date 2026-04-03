@@ -1,26 +1,16 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import ApartmentForm from '@/components/ApartmentForm';
 import ApartmentTable from '@/components/ApartmentTable';
 import Filters from '@/components/Filters';
 import { filterApartments, sortApartments } from '@/lib/apartmentUtils';
-import { Apartment, Filters as FilterValues, SortOption } from '@/lib/types';
-
-const sortOptions: Array<{ label: string; value: SortOption }> = [
-  { label: 'Total commute (ascending)', value: 'total_asc' },
-  { label: 'Price (ascending)', value: 'price_asc' },
-  { label: 'Price (descending)', value: 'price_desc' },
-  { label: 'Size (ascending)', value: 'size_asc' },
-  { label: 'Size (descending)', value: 'size_desc' },
-  { label: 'WU transit (ascending)', value: 'wu_transit_asc' },
-  { label: 'Uni transit (ascending)', value: 'uni_transit_asc' },
-];
+import { Apartment, Filters as FilterValues, SortKey, SortState } from '@/lib/types';
 
 export default function HomePage() {
   const [apartments, setApartments] = useState<Apartment[]>([]);
   const [filters, setFilters] = useState<FilterValues>({});
-  const [sortOption, setSortOption] = useState<SortOption>('total_asc');
+  const [sortState, setSortState] = useState<SortState>({ key: 'total_commute', direction: 'asc' });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -47,19 +37,32 @@ export default function HomePage() {
     void loadApartments();
   }, []);
 
+  function handleSortChange(key: SortKey) {
+    setSortState((prev) => {
+      if (prev.key === key) {
+        return { key, direction: prev.direction === 'asc' ? 'desc' : 'asc' };
+      }
+
+      return { key, direction: 'asc' };
+    });
+  }
+
   const filteredAndSorted = useMemo(() => {
     const filtered = filterApartments(apartments, filters);
-    return sortApartments(filtered, sortOption);
-  }, [apartments, filters, sortOption]);
+    return sortApartments(filtered, sortState);
+  }, [apartments, filters, sortState]);
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-6 p-4 md:p-8">
-      <header className="space-y-1">
-        <h1 className="text-3xl font-bold">Apartment Comparison</h1>
-        <p className="text-base-content/70">Compare rent, size, and commute times to WU & Uni Wien.</p>
+    <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 p-4 md:p-8">
+      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Apartment Comparison</h1>
+          <p className="text-base-content/70">Alle Wohnungen in einer übersichtlichen Tabelle.</p>
+        </div>
+        <Link className="btn btn-primary" href="/apartments/new">
+          Neue Wohnung hinzufügen
+        </Link>
       </header>
-
-      <ApartmentForm onSaved={loadApartments} />
 
       <Filters filters={filters} onChange={setFilters} />
 
@@ -92,7 +95,11 @@ export default function HomePage() {
           ) : null}
 
           {!isLoading && !error && filteredAndSorted.length > 0 ? (
-            <ApartmentTable apartments={filteredAndSorted} />
+            <ApartmentTable
+              apartments={filteredAndSorted}
+              sortState={sortState}
+              onSortChange={handleSortChange}
+            />
           ) : null}
         </div>
       </div>
