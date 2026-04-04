@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Apartment, SortKey, SortState } from '@/lib/types';
-import { getTotalBike, getTotalTransit, getTotalWalk } from '@/lib/apartmentUtils';
 
 type ApartmentTableProps = {
   apartments: Apartment[];
@@ -21,9 +20,6 @@ const sortableColumns: Array<{ key: SortKey; label: string }> = [
   { key: 'uni_transit', label: 'Uni Öffi' },
   { key: 'uni_bike', label: 'Uni Bike' },
   { key: 'uni_walk', label: 'Uni Zu Fuß' },
-  { key: 'total_transit', label: 'Total Öffi' },
-  { key: 'total_bike', label: 'Total Bike' },
-  { key: 'total_walk', label: 'Total Zu Fuß' },
   { key: 'priority', label: 'Priorität' },
 ];
 
@@ -78,9 +74,6 @@ export default function ApartmentTable({
               <td>{apartment.uni_transit} min</td>
               <td>{apartment.uni_bike} min</td>
               <td>{apartment.uni_walk} min</td>
-              <td>{getTotalTransit(apartment)} min</td>
-              <td>{getTotalBike(apartment)} min</td>
-              <td>{getTotalWalk(apartment)} min</td>
               <td>
                 <input
                   type="number"

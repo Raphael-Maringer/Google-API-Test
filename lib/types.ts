@@ -25,9 +25,6 @@ export type SortKey =
   | 'uni_transit'
   | 'uni_bike'
   | 'uni_walk'
-  | 'total_transit'
-  | 'total_bike'
-  | 'total_walk'
   | 'priority'
   | 'created_at';
 

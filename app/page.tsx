@@ -10,7 +10,7 @@ import { Apartment, Filters as FilterValues, SortKey, SortState } from '@/lib/ty
 export default function HomePage() {
   const [apartments, setApartments] = useState<Apartment[]>([]);
   const [filters, setFilters] = useState<FilterValues>({});
-  const [sortState, setSortState] = useState<SortState>({ key: 'total_transit', direction: 'asc' });
+  const [sortState, setSortState] = useState<SortState>({ key: 'wu_transit', direction: 'asc' });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
