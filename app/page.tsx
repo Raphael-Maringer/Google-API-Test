@@ -62,7 +62,7 @@ export default function HomePage() {
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold">
-            Stinky isch an Twinky
+            Wohnung
           </h1>
           <p className="text-base-content/70">
             Vallah sogar
