@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { Apartment } from '@/lib/types';
+import { getTotalBike, getTotalTransit, getTotalWalk } from '@/lib/apartmentUtils';
 
 type ApartmentDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -16,9 +17,7 @@ async function getApartment(id: string): Promise<Apartment | null> {
     return null;
   }
 
-  const response = await fetch(`${protocol}://${host}/api/apartments/${id}`, {
-    cache: 'no-store',
-  });
+  const response = await fetch(`${protocol}://${host}/api/apartments/${id}`, { cache: 'no-store' });
 
   if (!response.ok) {
     return null;
@@ -52,23 +51,19 @@ export default async function ApartmentDetailPage({ params }: ApartmentDetailPag
           <div className="grid gap-3 sm:grid-cols-2">
             <p><strong>Preis:</strong> € {apartment.price}</p>
             <p><strong>Größe:</strong> {apartment.size} m²</p>
-
-            <p><strong>WU Öffis:</strong> {apartment.wu_transit} min</p>
-            <p><strong>Uni Öffis:</strong> {apartment.uni_transit} min</p>
-
-            <p><strong>WU Fahrrad:</strong> {apartment.wu_bike} min</p>
-            <p><strong>Uni Fahrrad:</strong> {apartment.uni_bike} min</p>
-
+            <p><strong>Priorität:</strong> {apartment.priority}/10</p>
+            <p><strong>Angeschrieben:</strong> {apartment.contacted ? 'Ja' : 'Nein'}</p>
+            <p><strong>WU Öffi:</strong> {apartment.wu_transit} min</p>
+            <p><strong>WU Bike:</strong> {apartment.wu_bike} min</p>
             <p><strong>WU Zu Fuß:</strong> {apartment.wu_walk} min</p>
+            <p><strong>Uni Öffi:</strong> {apartment.uni_transit} min</p>
+            <p><strong>Uni Bike:</strong> {apartment.uni_bike} min</p>
             <p><strong>Uni Zu Fuß:</strong> {apartment.uni_walk} min</p>
-
+            <p className="sm:col-span-2"><strong>Total Öffi:</strong> {getTotalTransit(apartment)} min</p>
+            <p className="sm:col-span-2"><strong>Total Bike:</strong> {getTotalBike(apartment)} min</p>
+            <p className="sm:col-span-2"><strong>Total Zu Fuß:</strong> {getTotalWalk(apartment)} min</p>
             <p className="sm:col-span-2">
-              <a
-                className="link link-primary"
-                href={apartment.link}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a className="link link-primary" href={apartment.link} target="_blank" rel="noreferrer">
                 Zum Inserat
               </a>
             </p>

@@ -15,16 +15,11 @@ export type TravelTimes = {
 };
 
 const MOCK_TIMES: TravelTimes = {
-  wu: { transit: 0, bike: 0, walk: 0 },
-  uni: { transit: 0, bike: 0, walk: 0 },
+  wu: { transit: 25, bike: 19, walk: 53 },
+  uni: { transit: 31, bike: 24, walk: 67 },
 };
 
-async function getModeDurationInMinutes(
-  origin: string,
-  destination: string,
-  mode: TravelMode,
-  apiKey: string
-): Promise<number> {
+async function getModeDurationInMinutes(origin: string, destination: string, mode: TravelMode, apiKey: string): Promise<number> {
   const params = new URLSearchParams({
     origins: origin,
     destinations: destination,
@@ -32,10 +27,9 @@ async function getModeDurationInMinutes(
     key: apiKey,
   });
 
-  const response = await fetch(
-    `https://maps.googleapis.com/maps/api/distancematrix/json?${params.toString()}`,
-    { cache: 'no-store' }
-  );
+  const response = await fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?${params.toString()}`, {
+    cache: 'no-store',
+  });
 
   if (!response.ok) {
     throw new Error(`Distance Matrix API request failed: ${response.status}`);
@@ -44,19 +38,11 @@ async function getModeDurationInMinutes(
   const data = (await response.json()) as {
     rows?: Array<{ elements?: Array<{ duration?: { value?: number }; status?: string }> }>;
     status?: string;
-    error_message?: string;
   };
 
-  console.log('Google Distance Matrix Antwort:', JSON.stringify(data, null, 2));
-
   const element = data.rows?.[0]?.elements?.[0];
-
-  if (data.status !== 'OK') {
-    throw new Error(`Google API Status: ${data.status}${data.error_message ? ` - ${data.error_message}` : ''}`);
-  }
-
-  if (!element || element.status !== 'OK' || !element.duration?.value) {
-    throw new Error(`Element Status nicht OK: ${element?.status ?? 'undefined'}`);
+  if (data.status !== 'OK' || !element || element.status !== 'OK' || !element.duration?.value) {
+    throw new Error('Unable to parse Distance Matrix response.');
   }
 
   return Math.round(element.duration.value / 60);
@@ -75,10 +61,7 @@ async function getLocationTravelTimes(origin: string, destination: string, apiKe
 export async function calculateTravelTimes(origin: string): Promise<TravelTimes> {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
 
-  console.log('GOOGLE_MAPS_API_KEY vorhanden:', !!apiKey);
-
   if (!apiKey) {
-    console.log('Kein Google API Key gefunden -> MOCK_TIMES');
     return MOCK_TIMES;
   }
 
@@ -88,10 +71,8 @@ export async function calculateTravelTimes(origin: string): Promise<TravelTimes>
       getLocationTravelTimes(origin, UNI_INF_ADDRESS, apiKey),
     ]);
 
-    console.log('Travel Times erfolgreich geladen');
     return { wu, uni };
-  } catch (error) {
-    console.error('Google API Fehler -> MOCK_TIMES', error);
+  } catch {
     return MOCK_TIMES;
   }
 }

@@ -10,6 +10,8 @@ export type Apartment = {
   uni_transit: number;
   uni_bike: number;
   uni_walk: number;
+  contacted: boolean;
+  priority: number;
   created_at: string;
 };
 
@@ -26,6 +28,7 @@ export type SortKey =
   | 'total_transit'
   | 'total_bike'
   | 'total_walk'
+  | 'priority'
   | 'created_at';
 
 export type SortDirection = 'asc' | 'desc';

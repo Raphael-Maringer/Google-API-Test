@@ -20,11 +20,11 @@ export default function Filters({ filters, onChange }: FiltersProps) {
   return (
     <div className="card bg-base-100 shadow-md">
       <div className="card-body">
-        <h2 className="card-title">Filtern</h2>
+        <h2 className="card-title">Filters</h2>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <label className="form-control">
-            <span className="label-text mb-3">Preis in € (max)</span>
+            <span className="label-text">Max Price (€)</span>
             <input
               type="number"
               min={0}
@@ -35,7 +35,7 @@ export default function Filters({ filters, onChange }: FiltersProps) {
           </label>
 
           <label className="form-control">
-            <span className="label-text mb-3">Größe in m² (min)</span>
+            <span className="label-text">Min Size (m²)</span>
             <input
               type="number"
               min={0}
@@ -46,7 +46,7 @@ export default function Filters({ filters, onChange }: FiltersProps) {
           </label>
 
           <label className="form-control">
-            <span className="label-text mb-3">Zur WU in min (max)</span>
+            <span className="label-text">Max WU time (min)</span>
             <input
               type="number"
               min={0}
@@ -57,7 +57,7 @@ export default function Filters({ filters, onChange }: FiltersProps) {
           </label>
 
           <label className="form-control">
-            <span className="label-text mb-3">Zur Uni in min (max)</span>
+            <span className="label-text">Max Uni time (min)</span>
             <input
               type="number"
               min={0}

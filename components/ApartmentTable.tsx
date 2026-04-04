@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import { Apartment, SortKey, SortState } from '@/lib/types';
+import { getTotalBike, getTotalTransit, getTotalWalk } from '@/lib/apartmentUtils';
 
 type ApartmentTableProps = {
   apartments: Apartment[];
   sortState: SortState;
   onSortChange: (key: SortKey) => void;
+  onApartmentChange: (id: string, update: { contacted?: boolean; priority?: number }) => Promise<void>;
 };
 
 const sortableColumns: Array<{ key: SortKey; label: string }> = [
@@ -19,6 +21,10 @@ const sortableColumns: Array<{ key: SortKey; label: string }> = [
   { key: 'uni_transit', label: 'Uni Öffi' },
   { key: 'uni_bike', label: 'Uni Bike' },
   { key: 'uni_walk', label: 'Uni Zu Fuß' },
+  { key: 'total_transit', label: 'Total Öffi' },
+  { key: 'total_bike', label: 'Total Bike' },
+  { key: 'total_walk', label: 'Total Zu Fuß' },
+  { key: 'priority', label: 'Priorität' },
 ];
 
 function SortIndicator({ active, direction }: { active: boolean; direction: SortState['direction'] }) {
@@ -29,7 +35,12 @@ function SortIndicator({ active, direction }: { active: boolean; direction: Sort
   return <span>{direction === 'asc' ? '↑' : '↓'}</span>;
 }
 
-export default function ApartmentTable({ apartments, sortState, onSortChange }: ApartmentTableProps) {
+export default function ApartmentTable({
+  apartments,
+  sortState,
+  onSortChange,
+  onApartmentChange,
+}: ApartmentTableProps) {
   return (
     <div className="overflow-x-auto">
       <table className="table table-zebra table-pin-rows">
@@ -47,12 +58,13 @@ export default function ApartmentTable({ apartments, sortState, onSortChange }: 
                 </button>
               </th>
             ))}
+            <th>Angeschrieben?</th>
             <th>Link</th>
           </tr>
         </thead>
         <tbody>
           {apartments.map((apartment) => (
-            <tr key={apartment.id} className="hover cursor-pointer">
+            <tr key={apartment.id} className="hover">
               <td>
                 <Link className="link link-hover" href={`/apartments/${apartment.id}`}>
                   {apartment.address}
@@ -66,6 +78,34 @@ export default function ApartmentTable({ apartments, sortState, onSortChange }: 
               <td>{apartment.uni_transit} min</td>
               <td>{apartment.uni_bike} min</td>
               <td>{apartment.uni_walk} min</td>
+              <td>{getTotalTransit(apartment)} min</td>
+              <td>{getTotalBike(apartment)} min</td>
+              <td>{getTotalWalk(apartment)} min</td>
+              <td>
+                <input
+                  type="number"
+                  className="input input-bordered input-xs w-16"
+                  min={1}
+                  max={10}
+                  value={apartment.priority}
+                  onChange={(event) => {
+                    const next = Number(event.target.value);
+                    if (!Number.isNaN(next)) {
+                      void onApartmentChange(apartment.id, { priority: next });
+                    }
+                  }}
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-primary checkbox-sm"
+                  checked={apartment.contacted}
+                  onChange={(event) => {
+                    void onApartmentChange(apartment.id, { contacted: event.target.checked });
+                  }}
+                />
+              </td>
               <td>
                 <a className="link link-primary" href={apartment.link} target="_blank" rel="noreferrer">
                   Open

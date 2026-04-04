@@ -12,5 +12,7 @@ create table if not exists apartments (
   uni_transit integer not null,
   uni_bike integer not null,
   uni_walk integer not null,
+  contacted boolean not null default false,
+  priority integer not null default 5 check (priority >= 1 and priority <= 10),
   created_at timestamp with time zone default now()
 );

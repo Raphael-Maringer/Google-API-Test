@@ -22,12 +22,14 @@ export async function POST(request: Request) {
       link?: string;
       price?: number;
       size?: number;
+      priority?: number;
     };
 
     if (!body.address || !body.link || body.price === undefined || body.size === undefined) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 });
     }
 
+    const priority = Math.min(10, Math.max(1, body.priority ?? 5));
     const travelTimes = await calculateTravelTimes(body.address);
 
     const { data, error } = await supabase
@@ -43,6 +45,8 @@ export async function POST(request: Request) {
         uni_transit: travelTimes.uni.transit,
         uni_bike: travelTimes.uni.bike,
         uni_walk: travelTimes.uni.walk,
+        contacted: false,
+        priority,
       })
       .select('*')
       .single();
